@@ -1,0 +1,5 @@
+__pycache__
+.vscode
+facial_landmarks_68markup-768x619.jpg
+shape_predictor_68_face_landmarks.dat
+shape_predictor_68_face_landmarks.dat.bz2
