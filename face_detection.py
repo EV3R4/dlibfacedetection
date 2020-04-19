@@ -9,7 +9,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument('-f', '--face-predictor', required=True, help='Path to facial landmark predictor')
 ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces camera)')
 ap.add_argument('-v', '--video', required=False, help='Path to a video (replaces camera)')
-ap.add_argument('-c', '--camera', required=False, help='Camera index', default=0)
+ap.add_argument('-c', '--camera', required=False, help='Camera index', default='0')
 ap.add_argument('-b', '--blackmode', required=False, help='Overwrites the blackmode')
 args = vars(ap.parse_args())
 
