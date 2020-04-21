@@ -1,12 +1,12 @@
-# OpenCV Face Detection
-![GitHub](https://img.shields.io/github/license/EV3R4/OpenCVFaceDetection)
-![GitHub repo size](https://img.shields.io/github/repo-size/EV3R4/OpenCVFaceDetection)
+# dlib face detection
+![GitHub](https://img.shields.io/github/license/EV3R4/dlibfacedetection)
+![GitHub repo size](https://img.shields.io/github/repo-size/EV3R4/dlibfacedetection)
 
 Just some face detection code.
 
 ## Installation
 * Install [Python](https://www.python.org/)
-* Clone the repository with `git clone https://github.com/EV3R4/OpenCVFaceDetection.git`
+* Clone the repository with `git clone https://github.com/EV3R4/dlibfacedetection.git`
 * Install the requirements with `pip install -r requirements.txt`
 * Download the [pretrained model](https://github.com/davisking/dlib-models/raw/master/shape_predictor_68_face_landmarks.dat.bz2)
 
