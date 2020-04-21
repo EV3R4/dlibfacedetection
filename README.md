@@ -1,8 +1,9 @@
 # dlib face detection
+## Just some face detection code.
 ![GitHub](https://img.shields.io/github/license/EV3R4/dlibfacedetection)
 ![GitHub repo size](https://img.shields.io/github/repo-size/EV3R4/dlibfacedetection)
 
-Just some face detection code.
+![preview](preview_rescaled.png)
 
 ## Installation
 * Install [Python](https://www.python.org/)
