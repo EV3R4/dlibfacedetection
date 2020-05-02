@@ -11,14 +11,14 @@ ap.add_argument('-i', '--image', required=False, help='Path to an image (replace
 ap.add_argument('-v', '--video', required=False, help='Path to a video (replaces camera)')
 ap.add_argument('-c', '--camera', required=False, help='Camera index', default='0')
 ap.add_argument('-b', '--blackmode', required=False, help='Overwrites the blackmode')
-args = vars(ap.parse_args())
+args = ap.parse_args()
 
 # Face detection/prediction
 face_detector = dlib.get_frontal_face_detector()
-face_predictor = dlib.shape_predictor(args['face_predictor'])
+face_predictor = dlib.shape_predictor(args.face_predictor)
 
-if args['blackmode']:
-    if args['blackmode'] == '0':
+if args.blackmode:
+    if args.blackmode == '0':
         blackmode = False
     else:
         blackmode = True
@@ -91,15 +91,15 @@ def detect(img_orig):
     except NameError:
         last_frame = np.zeros((h, w, c), np.uint8)
     img, success = detect_faces(img_orig, img, img_gray)
-    cv2.imshow('Facial Landmark Detection #' + args['camera'], img)
+    cv2.imshow('Facial Landmark Detection #' + args.camera, img)
     return success
 
-if args['image']:
-    detect(cv2.imread(args['image']))
+if args.image:
+    detect(cv2.imread(args.image))
     cv2.waitKey(0)
     print('Closed by user')
-elif args['video']:
-    vid = cv2.VideoCapture(args['video'])
+elif args.video:
+    vid = cv2.VideoCapture(args.video)
     while vid.isOpened():
         if cv2.waitKey(1) == 27:
             print('Closed by user')
@@ -111,13 +111,13 @@ elif args['video']:
         img_orig = cv2.flip(img_orig, 1)
         detect(img_orig)
 else:
-    cam = cv2.VideoCapture(int(args['camera']))
+    cam = cv2.VideoCapture(int(args.camera))
     while cam.isOpened():
         key = cv2.waitKey(1)
         if key == 27:
             print('Closed by user')
             break
-        elif key == 122 and not args['blackmode']:
+        elif key == 122 and not args.blackmode:
             blackmode = not blackmode
         elif key == 49:
             enable_rect = not enable_rect
