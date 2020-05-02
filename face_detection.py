@@ -8,8 +8,7 @@ import dcv2lib
 ap = argparse.ArgumentParser()
 ap.add_argument('-f', '--face-predictor', required=True, help='Path to facial landmark predictor')
 ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces camera)')
-ap.add_argument('-v', '--video', required=False, help='Path to a video (replaces camera)')
-ap.add_argument('-c', '--camera', required=False, help='Camera index', default='0')
+ap.add_argument('-v', '--video', required=False, help='Path to a video or camera index')
 ap.add_argument('-b', '--blackmode', required=False, help='Overwrites the blackmode')
 args = ap.parse_args()
 
@@ -91,27 +90,22 @@ def detect(img_orig):
     except NameError:
         last_frame = np.zeros((h, w, c), np.uint8)
     img, success = detect_faces(img_orig, img, img_gray)
-    cv2.imshow('Facial Landmark Detection #' + args.camera, img)
+    cv2.imshow('Facial Landmark Detection #' + args.video, img)
     return success
 
 if args.image:
     detect(cv2.imread(args.image))
     cv2.waitKey(0)
     print('Closed by user')
-elif args.video:
-    vid = cv2.VideoCapture(args.video)
-    while vid.isOpened():
-        if cv2.waitKey(1) == 27:
-            print('Closed by user')
-            break
-        success, img_orig = vid.read()
-        if not success:
-            print('Could not read from ' + vid)
-            break
-        img_orig = cv2.flip(img_orig, 1)
-        detect(img_orig)
 else:
-    cam = cv2.VideoCapture(int(args.camera))
+    try:
+        cam = cv2.VideoCapture(int(args.video))
+        flip = True
+    except ValueError:
+        cam = cv2.VideoCapture(args.video)
+        flip = False
+    if not cam.isOpened():
+        print('Could not open video capture')
     while cam.isOpened():
         key = cv2.waitKey(1)
         if key == 27:
@@ -128,6 +122,9 @@ else:
         elif key == 52:
             enable_ear = not enable_ear
         success, img_orig = cam.read()
-        img_orig = cv2.flip(img_orig, 1)
+        if not success:
+            print('Could not get image from video capture')
+        if flip:
+            img_orig = cv2.flip(img_orig, 1)
         detect(img_orig)
 cv2.destroyAllWindows()

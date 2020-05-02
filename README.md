@@ -27,3 +27,6 @@ In the "blackmode" the background will be black which is useful for streaming
 * 2 - Enables/Disables lines
 * 3 - Enables/Disables points
 * 4 - Enables/Disables the EAR display
+
+## Notes
+If no faces were found the program uses the last frame were it found faces
