@@ -99,14 +99,14 @@ if args.image:
     print('Closed by user')
 else:
     try:
-        cam = cv2.VideoCapture(int(args.video))
+        vid = cv2.VideoCapture(int(args.video))
         flip = True
     except ValueError:
-        cam = cv2.VideoCapture(args.video)
+        vid = cv2.VideoCapture(args.video)
         flip = False
-    if not cam.isOpened():
+    if not vid.isOpened():
         print('Could not open video capture')
-    while cam.isOpened():
+    while vid.isOpened():
         key = cv2.waitKey(1)
         if key == 27:
             print('Closed by user')
@@ -121,11 +121,12 @@ else:
             enable_points = not enable_points
         elif key == 52:
             enable_ear = not enable_ear
-        success, img_orig = cam.read()
+        success, img_orig = vid.read()
         if not success:
             print('Could not get image from video capture')
             break
         if flip:
             img_orig = cv2.flip(img_orig, 1)
         detect(img_orig)
+    vid.release()
 cv2.destroyAllWindows()
