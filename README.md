@@ -18,7 +18,7 @@ The value of `-f` needs to be set to the model "shape_predictor_68_face_landmark
 
 If you set the value `-b` to 0 or 1 you will overwrite the "blackmode" value
 
-In the "blackmode" the background will be black
+In the "blackmode" the background will be black which is useful for streaming
 
 ## Keys
 * ESCAPE - Closes the window
