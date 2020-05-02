@@ -124,7 +124,7 @@ else:
         success, img_orig = cam.read()
         if not success:
             print('Could not get image from video capture')
-            return
+            break
         if flip:
             img_orig = cv2.flip(img_orig, 1)
         detect(img_orig)
