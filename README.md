@@ -36,6 +36,9 @@ In the "blackmode" the background will be black which is useful for streaming
 * point_color: The color of points
 * f2r_color: The color of Face to Rectangles (F2R)
 
+## Face to Rectangles (F2R)
+![preview](f2r_preview_rescaled.png)
+
 ## Notes
 If no faces were found the program uses the last frame were it found faces
 
