@@ -30,3 +30,5 @@ In the "blackmode" the background will be black which is useful for streaming
 
 ## Notes
 If no faces were found the program uses the last frame were it found faces
+
+The program might not work correctly if you cover parts of your face or wear glasses
