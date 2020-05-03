@@ -27,6 +27,14 @@ In the "blackmode" the background will be black which is useful for streaming
 * 2 - Enables/Disables lines
 * 3 - Enables/Disables points
 * 4 - Enables/Disables the EAR display
+* 5 - Enables/Disables Face to Rectangles (F2R)
+
+## Config
+### Values
+* rect_color: The color of rects around faces
+* line_color: The color of lines
+* point_color: The color of points
+* f2r_color: The color of Face to Rectangles (F2R)
 
 ## Notes
 If no faces were found the program uses the last frame were it found faces

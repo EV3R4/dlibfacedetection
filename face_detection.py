@@ -3,6 +3,15 @@ import numpy as np
 import cv2
 import dlib
 import dcv2lib
+from json import loads
+from os.path import isfile
+from shutil import copyfile
+
+# Config
+if not isfile('config.json'):
+    copyfile('defaultconfig.json', 'config.json')
+with open('config.json', 'r') as f:
+    config = loads(f.read())
 
 # ArgumentParser
 ap = argparse.ArgumentParser()
@@ -28,17 +37,18 @@ enable_rect = True
 enable_lines = True
 enable_points = True
 enable_ear = True
+enable_f2r = False
 
 def drawlines(img, shape, name=''):
     sn = 0
     for (sx, sy) in shape:
         if sn < len(shape)-1:
             nx, ny = shape[sn+1]
-            cv2.line(img, (sx, sy), (nx, ny), (0, 0, 255), 2)
+            cv2.line(img, (sx, sy), (nx, ny), config['line_color'], 2)
             sn += 1
         else:
             nx, ny = shape[0]
-            cv2.line(img, (sx, sy), (nx, ny), (0, 0, 255), 2)
+            cv2.line(img, (sx, sy), (nx, ny), config['line_color'], 2)
 
 def detect_faces(img_orig, img, img_gray):
     global last_frame
@@ -47,15 +57,19 @@ def detect_faces(img_orig, img, img_gray):
         shape = dcv2lib.shape_to_np(face_predictor(img_gray, rect), 68)
         (x, y, w, h) = dcv2lib.rect_to_bb(rect)
         if enable_rect:
-            cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            cv2.putText(img, 'Face #' + str(i), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.rectangle(img, (x, y), (x+w, y+h), config['rect_color'], 2)
+            cv2.putText(img, 'Face #' + str(i), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, config['rect_color'], 2)
         if enable_lines:
             for area in dcv2lib.FL68AREAS:
                 start, end = dcv2lib.FL68AREAS[area]
                 drawlines(img, shape[start:end], area)
         if enable_points:
             for (sx, sy) in shape:
-                cv2.circle(img, (sx, sy), 1, (255, 0, 255), -1)
+                cv2.circle(img, (sx, sy), 1, config['point_color'], -1)
+        if enable_f2r:
+            cv2.rectangle(img, (shape[60][0], shape[62][1]), (shape[64][0], shape[66][1]), config['f2r_color'], 2)
+            cv2.rectangle(img, (shape[36][0], int((shape[37][1] + shape[38][1]) / 2)), (shape[39][0], int((shape[41][1] + shape[40][1]) / 2)), config['f2r_color'], 2)
+            cv2.rectangle(img, (shape[42][0], int((shape[43][1] + shape[44][1]) / 2)), (shape[45][0], int((shape[47][1] + shape[46][1]) / 2)), config['f2r_color'], 2)
         
         # EAR detection
         if enable_ear:
@@ -66,7 +80,7 @@ def detect_faces(img_orig, img, img_gray):
             left_ear = dcv2lib.get_ear(left_eye)
             right_ear = dcv2lib.get_ear(right_eye)
             ear = (left_ear + right_ear) / 2
-            cv2.putText(img, 'EAR: ' + str(ear), (x, y+h+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(img, 'EAR: ' + str(ear), (x, y+h+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, config['rect_color'], 2)
     
     if len(rects) > 0:
         if blackmode:
@@ -121,6 +135,8 @@ else:
             enable_points = not enable_points
         elif key == 52:
             enable_ear = not enable_ear
+        elif key == 53:
+            enable_f2r = not enable_f2r
         success, img_orig = vid.read()
         if not success:
             print('Could not get image from video capture')
