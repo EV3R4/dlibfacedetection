@@ -7,19 +7,20 @@ from json import loads
 from os.path import isfile
 from shutil import copyfile
 
-# Config
-if not isfile('config.json'):
-    copyfile('defaultconfig.json', 'config.json')
-with open('config.json', 'r') as f:
-    config = loads(f.read())
-
 # ArgumentParser
 ap = argparse.ArgumentParser()
+ap.add_argument('-c', '--config', required=False, help='Overwrites the config path', default='config.json')
 ap.add_argument('-f', '--face-predictor', required=True, help='Path to facial landmark predictor')
-ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces camera)')
+ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces -v/--video)')
 ap.add_argument('-v', '--video', required=False, help='Path to a video or camera index', default='0')
 ap.add_argument('-b', '--blackmode', required=False, help='Overwrites the blackmode')
 args = ap.parse_args()
+
+# Config
+if args.config == 'config.json' and not isfile('config.json'):
+    copyfile('defaultconfig.json', 'config.json')
+with open(args.config, 'r') as f:
+    config = loads(f.read())
 
 # Face detection/prediction
 face_detector = dlib.get_frontal_face_detector()
