@@ -1,5 +1,5 @@
 # dlib face detection
-## Just some face detection code.
+## Some face detection code.
 ![GitHub](https://img.shields.io/github/license/EV3R4/dlibfacedetection)
 ![GitHub repo size](https://img.shields.io/github/repo-size/EV3R4/dlibfacedetection)
 
@@ -16,30 +16,33 @@ Run `python face_detection.py` with the needed arguments
 
 The value of `-f` needs to be set to the model "shape_predictor_68_face_landmarks.dat"
 
-If you set the value `-b` to 0 or 1 you will overwrite the "blackmode" value
+If the `-b` value is set to 1 or 0 you will overwrite the "blackmode" value
 
-In the "blackmode" the background will be black which is useful for streaming
+In "blackmode" the background will be black which is useful for streaming
 
 ## Keys
 * ESCAPE - Closes the window
 * z - Enables/Disables "blackmode"
-* 1 - Enables/Disables rects around the faces
-* 2 - Enables/Disables lines
-* 3 - Enables/Disables points
-* 4 - Enables/Disables the EAR display
-* 5 - Enables/Disables Face to Rectangles (F2R)
+* 1 - Enables/Disables rectangles around the faces
+* 2 - Enables/Disables the face numbers over rectangles
+* 3 - Enables/Dsiables the Eye Aspect Ratio (EAR) text under rectangles
+* 4 - Enables/Disables lines
+* 5 - Enables/Disables points
+* 6 - Enables/Disables Face to Rectangles (F2R)
 
 ## Config
 ### Values
-* rect_color: The color of rects around faces
+* enable_last_frame: If set to true the program uses the last frame where it found faces when no faces were found
+* rect_color: The color of rectangles around the faces
+* text_color: The color of face numbers
+* ear_color: The color of the Eye Aspect Ratio (EAR) text
 * line_color: The color of lines
 * point_color: The color of points
 * f2r_color: The color of Face to Rectangles (F2R)
+* double_f2r_mouth_height: If set to `true` doubles the mouth height
 
 ## Face to Rectangles (F2R)
 ![preview](f2r_preview_rescaled.png)
 
 ## Notes
-If no faces were found the program uses the last frame were it found faces
-
 The program might not work correctly if you cover parts of your face or wear glasses

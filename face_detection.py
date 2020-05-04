@@ -35,9 +35,10 @@ else:
     blackmode = False
 
 enable_rect = True
+enable_text = True
+enable_ear = True
 enable_lines = True
 enable_points = True
-enable_ear = True
 enable_f2r = False
 
 def drawlines(img, shape, name=''):
@@ -59,20 +60,8 @@ def detect_faces(img_orig, img, img_gray):
         (x, y, w, h) = dcv2lib.rect_to_bb(rect)
         if enable_rect:
             cv2.rectangle(img, (x, y), (x+w, y+h), config['rect_color'], 2)
-            cv2.putText(img, 'Face #' + str(i), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, config['rect_color'], 2)
-        if enable_lines:
-            for area in dcv2lib.FL68AREAS:
-                start, end = dcv2lib.FL68AREAS[area]
-                drawlines(img, shape[start:end], area)
-        if enable_points:
-            for (sx, sy) in shape:
-                cv2.circle(img, (sx, sy), 1, config['point_color'], -1)
-        if enable_f2r:
-            cv2.rectangle(img, (shape[60][0], shape[62][1]), (shape[64][0], shape[66][1]), config['f2r_color'], 2)
-            cv2.rectangle(img, (shape[36][0], int((shape[37][1] + shape[38][1]) / 2)), (shape[39][0], int((shape[41][1] + shape[40][1]) / 2)), config['f2r_color'], 2)
-            cv2.rectangle(img, (shape[42][0], int((shape[43][1] + shape[44][1]) / 2)), (shape[45][0], int((shape[47][1] + shape[46][1]) / 2)), config['f2r_color'], 2)
-        
-        # EAR detection
+        if enable_text:
+            cv2.putText(img, 'Face #' + str(i), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, config['text_color'], 2)
         if enable_ear:
             (lestart, leend) = dcv2lib.FL68AREAS['left_eye']
             (restart, reend) = dcv2lib.FL68AREAS['right_eye']
@@ -81,14 +70,29 @@ def detect_faces(img_orig, img, img_gray):
             left_ear = dcv2lib.get_ear(left_eye)
             right_ear = dcv2lib.get_ear(right_eye)
             ear = (left_ear + right_ear) / 2
-            cv2.putText(img, 'EAR: ' + str(ear), (x, y+h+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, config['rect_color'], 2)
+            cv2.putText(img, 'EAR: ' + str(ear), (x, y+h+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, config['ear_color'], 2)
+        if enable_lines:
+            for area in dcv2lib.FL68AREAS:
+                start, end = dcv2lib.FL68AREAS[area]
+                drawlines(img, shape[start:end], area)
+        if enable_points:
+            for (sx, sy) in shape:
+                cv2.circle(img, (sx, sy), 1, config['point_color'], -1)
+        if enable_f2r:
+            if config['double_f2r_mouth_height']:
+                mouth_height = (shape[64][0], shape[66][1] + (shape[66][1] - shape[62][1]) * 2)
+            else:
+                mouth_height = (shape[64][0], shape[66][1])
+            cv2.rectangle(img, (shape[60][0], shape[62][1]), mouth_height, config['f2r_color'], 2)
+            cv2.rectangle(img, (shape[36][0], int((shape[37][1] + shape[38][1]) / 2)), (shape[39][0], int((shape[41][1] + shape[40][1]) / 2)), config['f2r_color'], 2)
+            cv2.rectangle(img, (shape[42][0], int((shape[43][1] + shape[44][1]) / 2)), (shape[45][0], int((shape[47][1] + shape[46][1]) / 2)), config['f2r_color'], 2)
     
     if len(rects) > 0:
-        if blackmode:
+        if blackmode and config['enable_last_frame']:
             last_frame = img
         return img, True
     else:
-        if blackmode:
+        if blackmode and config['enable_last_frame']:
             return last_frame, False
         return img, False
 
@@ -131,12 +135,14 @@ else:
         elif key == 49:
             enable_rect = not enable_rect
         elif key == 50:
-            enable_lines = not enable_lines
+            enable_text = not enable_text
         elif key == 51:
-            enable_points = not enable_points
-        elif key == 52:
             enable_ear = not enable_ear
+        elif key == 52:
+            enable_lines = not enable_lines
         elif key == 53:
+            enable_points = not enable_points
+        elif key == 54:
             enable_f2r = not enable_f2r
         success, img_orig = vid.read()
         if not success:
