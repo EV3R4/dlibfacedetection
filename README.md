@@ -22,6 +22,7 @@ In "blackmode" the background will be black which is useful for streaming
 
 ## Keys
 * ESCAPE - Closes the window
+* r - Reload config
 * z - Enables/Disables "blackmode"
 * 1 - Enables/Disables rectangles around the faces
 * 2 - Enables/Disables the face numbers over rectangles

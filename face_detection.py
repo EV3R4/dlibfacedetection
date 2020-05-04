@@ -130,6 +130,9 @@ else:
         if key == 27:
             print('Closed by user')
             break
+        elif key == 114:
+            with open(args.config, 'r') as f:
+                config = loads(f.read())
         elif key == 122 and not args.blackmode:
             blackmode = not blackmode
         elif key == 49:
