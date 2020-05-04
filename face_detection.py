@@ -1,14 +1,16 @@
-import argparse
+from argparse import ArgumentParser
 import numpy as np
 import cv2
 import dlib
 import dcv2lib
 from json import loads
+from json.decoder import JSONDecodeError
 from os.path import isfile
 from shutil import copyfile
+from sys import exit
 
 # ArgumentParser
-ap = argparse.ArgumentParser()
+ap = ArgumentParser()
 ap.add_argument('-c', '--config', required=False, help='Overwrites the config path', default='config.json')
 ap.add_argument('-f', '--face-predictor', required=True, help='Path to facial landmark predictor')
 ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces -v/--video)')
@@ -16,15 +18,59 @@ ap.add_argument('-v', '--video', required=False, help='Path to a video or camera
 ap.add_argument('-b', '--blackmode', required=False, help='Overwrites the blackmode')
 args = ap.parse_args()
 
-# Config
-if args.config == 'config.json' and not isfile('config.json'):
-    copyfile('defaultconfig.json', 'config.json')
-with open(args.config, 'r') as f:
-    config = loads(f.read())
+DEFAULT_CONFIG ='''{
+    "enable_last_frame": true,
+    "rect_color": [0, 255, 0],
+    "text_color": [0, 255, 0],
+    "ear_color": [0, 255, 0],
+    "line_color": [0, 0, 255],
+    "point_color": [255, 0, 255],
+    "f2r_color": [255, 255, 255],
+    "double_f2r_mouth_height": false
+}'''
+CONFIG_FORMAT = {
+    'enable_last_frame': bool,
+    'rect_color': list,
+    'text_color': list,
+    'ear_color': list,
+    'line_color': list,
+    'point_color': list,
+    'f2r_color': list,
+    'double_f2r_mouth_height': bool
+}
+def load_config():
+    global config
+    if not isfile(args.config):
+        with open(args.config, 'w') as f:
+            f.write(DEFAULT_CONFIG)
+    try:
+        with open(args.config, 'r') as f:
+            config = loads(f.read())
+    except JSONDecodeError:
+        print('Error: Config is malformed')
+        exit(1)
+    
+    # Validation
+    contains = []
+    for key, value in config.items():
+        try:
+            if type(value) is not CONFIG_FORMAT[key]:
+                print('Error: Config value "' + key + '" needs to be of type ' + CONFIG_FORMAT[key].__name__)
+                exit(1)
+            else:
+                contains.append(key)
+        except KeyError:
+            print('Warning: Config contains unknown value "' + key + '"')
+    for key in CONFIG_FORMAT:
+        if not key in config:
+            print('Error: Config is missing "' + key + '"')
+            exit(1)
+
+load_config()
 
 # Face detection/prediction
-face_detector = dlib.get_frontal_face_detector()
-face_predictor = dlib.shape_predictor(args.face_predictor)
+FACE_DETECTOR = dlib.get_frontal_face_detector()
+FACE_PREDICTOR = dlib.shape_predictor(args.face_predictor)
 
 if args.blackmode:
     if args.blackmode == '0':
@@ -54,9 +100,9 @@ def drawlines(img, shape, name=''):
 
 def detect_faces(img_orig, img, img_gray):
     global last_frame
-    rects = face_detector(img_gray, 1)
+    rects = FACE_DETECTOR(img_gray, 1)
     for (i, rect) in enumerate(rects):
-        shape = dcv2lib.shape_to_np(face_predictor(img_gray, rect), 68)
+        shape = dcv2lib.shape_to_np(FACE_PREDICTOR(img_gray, rect), 68)
         (x, y, w, h) = dcv2lib.rect_to_bb(rect)
         if enable_rect:
             cv2.rectangle(img, (x, y), (x+w, y+h), config['rect_color'], 2)
@@ -131,8 +177,7 @@ else:
             print('Closed by user')
             break
         elif key == 114:
-            with open(args.config, 'r') as f:
-                config = loads(f.read())
+            load_config()
         elif key == 122 and not args.blackmode:
             blackmode = not blackmode
         elif key == 49:
