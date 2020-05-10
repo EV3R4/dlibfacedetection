@@ -11,7 +11,7 @@ from sys import exit
 
 # ArgumentParser
 ap = ArgumentParser()
-ap.add_argument('-c', '--config', required=False, help='Overwrites the config path', default='config.json')
+ap.add_argument('-c', '--config', required=False, help='Path to the config file', default='config.json')
 ap.add_argument('-f', '--face-predictor', required=True, help='Path to facial landmark predictor')
 ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces -v/--video)')
 ap.add_argument('-v', '--video', required=False, help='Path to a video or camera index', default='0')
