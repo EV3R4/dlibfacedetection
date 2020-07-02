@@ -15,7 +15,7 @@ ap.add_argument('-c', '--config', required=False, help='Path to the config file'
 ap.add_argument('-f', '--face-predictor', required=True, help='Path to facial landmark predictor')
 ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces -v/--video)')
 ap.add_argument('-v', '--video', required=False, help='Path to a video or camera index', default='0')
-ap.add_argument('-b', '--blackmode', required=False, help='Overwrites the blackmode')
+ap.add_argument('-b', '--blackmode', required=False, help='Forcefully activates the blackmode', action="store_true")
 args = ap.parse_args()
 
 DEFAULT_CONFIG ='''{
@@ -72,13 +72,7 @@ load_config()
 FACE_DETECTOR = dlib.get_frontal_face_detector()
 FACE_PREDICTOR = dlib.shape_predictor(args.face_predictor)
 
-if args.blackmode:
-    if args.blackmode == '0':
-        blackmode = False
-    else:
-        blackmode = True
-else:
-    blackmode = False
+blackmode = args.blackmode
 
 enable_rect = True
 enable_text = True

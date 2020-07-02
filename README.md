@@ -14,9 +14,9 @@
 ## Executing the face detection
 Run `python face_detection.py` with the needed arguments
 
-The value of `-f` needs to be set to the model "shape_predictor_68_face_landmarks.dat"
+The value of `-f/--face-predictor` needs to be set to the model "shape_predictor_68_face_landmarks.dat"
 
-If the `-b` value is set to 1 or 0 you will overwrite the "blackmode" value
+If the `-b/--blackmode` argument is passed the "blackmode" will be forcefully activated
 
 In "blackmode" the background will be black which is useful for streaming
 
