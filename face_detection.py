@@ -14,6 +14,8 @@ ap.add_argument('-f', '--face-predictor', required=True, help='Path to facial la
 ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces -v/--video)')
 ap.add_argument('-v', '--video', required=False, help='Path to a video or camera index', default='0')
 ap.add_argument('-b', '--blackmode', required=False, help='Forcefully activates the blackmode', action="store_true")
+ap.add_argument('-V', '--no-video-window', required=False, help='Deactivates the video window', action="store_true")
+ap.add_argument('-I', '--no-input-window', required=False, help='Deactivates the input window', action="store_true")
 args = ap.parse_args()
 
 DEFAULT_CONFIG ='''{
@@ -149,10 +151,8 @@ def draw_faces(img, rects, shapes):
         if enable_f2r:
             draw_f2r(img, shape)
 
-def detect_and_show(img):
+def detect_and_show(img, img_gray):
     h, w, c = img.shape
-    
-    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
     rects, shapes = detect_faces(img_gray)
 
@@ -164,10 +164,17 @@ def detect_and_show(img):
     if len(rects) > 0 or not config['enable_last_frame']:
         cv2.imshow('Facial Landmark Detection #' + args.video, img)
 
-    return success
-
 if args.image:
-    detect_and_show(cv2.imread(args.image))
+    img = cv2.imread(args.image)
+
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    if not args.no_video_window: cv2.imshow('Video #' + args.video, img)
+    
+    if not args.no_input_window: cv2.imshow('Input #' + args.video, img_gray)
+
+    detect_and_show(img, img_gray)
+
     cv2.waitKey(0)
     print('Closed by user')
 else:
@@ -200,12 +207,21 @@ else:
             enable_ear = not enable_ear
         elif key == 54:
             enable_f2r = not enable_f2r
+        
         success, img = vid.read()
         if not success:
             print('Could not get image from video capture')
             break
+
         if flip:
             img = cv2.flip(img, 1)
-        detect_and_show(img)
+    
+        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        
+        if not args.no_video_window: cv2.imshow('Video #' + args.video, img)
+    
+        if not args.no_input_window: cv2.imshow('Input #' + args.video, img_gray)
+
+        detect_and_show(img, img_gray)
     vid.release()
 cv2.destroyAllWindows()
