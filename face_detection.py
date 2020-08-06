@@ -164,19 +164,43 @@ def detect_and_show(img, img_gray):
     if len(rects) > 0 or not config['enable_last_frame']:
         cv2.imshow('Facial Landmark Detection #' + args.video, img)
 
+def handle_input():
+    global blackmode, enable_rect, enable_lines, enable_points, enable_text, enable_ear, enable_f2r
+
+    key = cv2.waitKey(1)
+    if key == 27:
+        print('Closed by user')
+        return False
+    elif key == 114:
+        load_config()
+    elif key == 122 and not args.blackmode:
+        blackmode = not blackmode
+    elif key == 49:
+        enable_rect = not enable_rect
+    elif key == 50:
+        enable_lines = not enable_lines
+    elif key == 51:
+        enable_points = not enable_points
+    elif key == 52:
+        enable_text = not enable_text
+    elif key == 53:
+        enable_ear = not enable_ear
+    elif key == 54:
+        enable_f2r = not enable_f2r
+
+    return True
+
 if args.image:
     img = cv2.imread(args.image)
 
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    
+
     if not args.no_video_window: cv2.imshow('Video #' + args.video, img)
-    
+
     if not args.no_input_window: cv2.imshow('Input #' + args.video, img_gray)
 
-    detect_and_show(img, img_gray)
-
-    cv2.waitKey(0)
-    print('Closed by user')
+    while handle_input():
+        detect_and_show(img.copy(), img_gray)
 else:
     try:
         vid = cv2.VideoCapture(int(args.video))
@@ -186,28 +210,7 @@ else:
         flip = False
     if not vid.isOpened():
         print('Could not open video capture')
-    while vid.isOpened():
-        key = cv2.waitKey(1)
-        if key == 27:
-            print('Closed by user')
-            break
-        elif key == 114:
-            load_config()
-        elif key == 122 and not args.blackmode:
-            blackmode = not blackmode
-        elif key == 49:
-            enable_rect = not enable_rect
-        elif key == 50:
-            enable_lines = not enable_lines
-        elif key == 51:
-            enable_points = not enable_points
-        elif key == 52:
-            enable_text = not enable_text
-        elif key == 53:
-            enable_ear = not enable_ear
-        elif key == 54:
-            enable_f2r = not enable_f2r
-        
+    while vid.isOpened() and handle_input():
         success, img = vid.read()
         if not success:
             print('Could not get image from video capture')
@@ -215,7 +218,6 @@ else:
 
         if flip:
             img = cv2.flip(img, 1)
-    
         img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
         if not args.no_video_window: cv2.imshow('Video #' + args.video, img)
