@@ -22,13 +22,13 @@ In blackmode the background (image from the camera) will be black which is usefu
 
 ## Keys
 * ESCAPE - Closes the window
-* r - Reload config
+* r - Reloads the config
 * z - Enables/disables blackmode
 * 1 - Enables/disables rectangles around faces
-* 2 - Enables/disables face indexes over rectangles
-* 3 - Enables/disables Eye Aspect Ratio (EAR) under rectangles
-* 4 - Enables/disables lines
-* 5 - Enables/disables points
+* 2 - Enables/disables lines
+* 3 - Enables/disables points
+* 4 - Enables/disables face indexes over rectangles
+* 5 - Enables/disables Eye Aspect Ratio (EAR) under rectangles
 * 6 - Enables/disables Face to Rectangles (F2R)
 
 ## Config

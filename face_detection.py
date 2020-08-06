@@ -19,20 +19,20 @@ args = ap.parse_args()
 DEFAULT_CONFIG ='''{
     "enable_last_frame": false,
     "rect_color": [0, 255, 0],
-    "text_color": [0, 255, 0],
-    "ear_color": [0, 255, 0],
     "line_color": [0, 0, 255],
     "point_color": [255, 0, 255],
+    "text_color": [0, 255, 0],
+    "ear_color": [0, 255, 0],
     "f2r_color": [255, 255, 255],
     "double_f2r_mouth_height": false
 }'''
 CONFIG_FORMAT = {
     'enable_last_frame': bool,
     'rect_color': list,
-    'text_color': list,
-    'ear_color': list,
     'line_color': list,
     'point_color': list,
+    'text_color': list,
+    'ear_color': list,
     'f2r_color': list,
     'double_f2r_mouth_height': bool
 }
@@ -73,10 +73,10 @@ face_predictor = dlib.shape_predictor(args.face_predictor)
 blackmode = args.blackmode
 
 enable_rect = True
-enable_text = True
-enable_ear = True
 enable_lines = True
 enable_points = True
+enable_text = True
+enable_ear = True
 enable_f2r = False
 
 def detect_faces(img_gray):
@@ -138,14 +138,14 @@ def draw_faces(img, rects, shapes):
 
         if enable_rect:
             draw_rect(img, x, y, w, h)
-        if enable_text:
-            draw_text(img, 'Face #' + str(i), (x, y - 10))
-        if enable_ear:
-            draw_ear(img, shape, x, y, h)
         if enable_lines:
             draw_lines(img, shape)
         if enable_points:
             draw_points(img, shape)
+        if enable_text:
+            draw_text(img, 'Face #' + str(i), (x, y - 10))
+        if enable_ear:
+            draw_ear(img, shape, x, y, h)
         if enable_f2r:
             draw_f2r(img, shape)
 
@@ -191,13 +191,13 @@ else:
         elif key == 49:
             enable_rect = not enable_rect
         elif key == 50:
-            enable_text = not enable_text
-        elif key == 51:
-            enable_ear = not enable_ear
-        elif key == 52:
             enable_lines = not enable_lines
-        elif key == 53:
+        elif key == 51:
             enable_points = not enable_points
+        elif key == 52:
+            enable_text = not enable_text
+        elif key == 53:
+            enable_ear = not enable_ear
         elif key == 54:
             enable_f2r = not enable_f2r
         success, img = vid.read()
