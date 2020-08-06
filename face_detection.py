@@ -9,13 +9,13 @@ import dcv2lib
 import dlib
 
 ap = argparse.ArgumentParser()
-ap.add_argument('-c', '--config', required=False, help='Path to the config file', default='config.json')
-ap.add_argument('-f', '--face-predictor', required=True, help='Path to facial landmark predictor')
-ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces -v/--video)')
-ap.add_argument('-v', '--video', required=False, help='Path to a video or camera index', default='0')
-ap.add_argument('-b', '--blackmode', required=False, help='Forcefully activates the blackmode', action="store_true")
-ap.add_argument('-V', '--no-video-window', required=False, help='Deactivates the video window', action="store_true")
-ap.add_argument('-I', '--no-input-window', required=False, help='Deactivates the input window', action="store_true")
+ap.add_argument('-c', '--config', required=False, help='Path to the config file.', default='config.json')
+ap.add_argument('-f', '--face-predictor', required=True, help='Path to facial landmark predictor.')
+ap.add_argument('-i', '--image', required=False, help='Path to an image (replaces -v/--video).')
+ap.add_argument('-v', '--video', required=False, help='Path to a video or camera index.', default='0')
+ap.add_argument('-b', '--blackmode', required=False, help='Forcefully activates the blackmode.', action="store_true")
+ap.add_argument('-V', '--no-video-window', required=False, help='Deactivates the video window.', action="store_true")
+ap.add_argument('-I', '--no-input-window', required=False, help='Deactivates the input window.', action="store_true")
 args = ap.parse_args()
 
 DEFAULT_CONFIG ='''{
