@@ -35,10 +35,10 @@ In blackmode the background (image from the camera) will be black which is usefu
 ### Values
 * enable_last_frame: If set to `true`, the program uses the last frame in which faces were found if no faces are being detected.
 * rect_color: The color of rectangles around the faces.
-* text_color: The color of face numbers.
-* ear_color: The color of the Eye Aspect Ratio (EAR) text.
 * line_color: The color of lines.
 * point_color: The color of points.
+* text_color: The color of face numbers.
+* ear_color: The color of the Eye Aspect Ratio (EAR) text.
 * f2r_color: The color of Face to Rectangles (F2R).
 * double_f2r_mouth_height: If set to `true` doubles the mouth height.
 
