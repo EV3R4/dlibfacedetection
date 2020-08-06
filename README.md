@@ -1,5 +1,5 @@
 # dlib face detection
-## Some face detection code.
+## Face detection display for dlib
 ![GitHub](https://img.shields.io/github/license/EV3R4/dlibfacedetection)
 ![GitHub repo size](https://img.shields.io/github/repo-size/EV3R4/dlibfacedetection)
 
