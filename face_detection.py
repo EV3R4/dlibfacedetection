@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import sys
 
 import cv2
 import numpy as np
@@ -47,24 +48,24 @@ def load_config():
         with open(args.config, 'r') as f:
             config = json.loads(f.read())
     except json.JSONDecodeError:
-        print('Error: Config is malformed')
-        exit(1)
+        print('ERROR: Config is malformed!')
+        sys.exit(1)
     
     # Validation
     contains = []
     for key, value in config.items():
         try:
             if type(value) is not CONFIG_FORMAT[key]:
-                print('Error: Config value "' + key + '" needs to be of type ' + CONFIG_FORMAT[key].__name__)
-                exit(1)
+                print('ERROR: Config value "{}" needs to be of type {}'.format(key, CONFIG_FORMAT[key].__name__))
+                sys.exit(1)
             else:
                 contains.append(key)
         except KeyError:
-            print('Warning: Config contains unknown value "' + key + '"')
+            print('WARNING: Config contains unknown key "{}"'.format(key))
     for key in CONFIG_FORMAT:
         if not key in config:
-            print('Error: Config is missing "' + key + '"')
-            exit(1)
+            print('ERROR: Config is missing "{}"'.format(key))
+            sys.exit(1)
 
 load_config()
 
@@ -169,7 +170,7 @@ def handle_input():
 
     key = cv2.waitKey(1)
     if key == 27:
-        print('Closed by user')
+        print('Closed by user.')
         return False
     elif key == 114:
         load_config()
@@ -209,11 +210,11 @@ else:
         vid = cv2.VideoCapture(args.video)
         flip = False
     if not vid.isOpened():
-        print('Could not open video capture')
+        print('Could not open video capture!')
     while vid.isOpened() and handle_input():
         success, img = vid.read()
         if not success:
-            print('Could not get image from video capture')
+            print('Could not get an image from video capture!')
             break
 
         if flip:
