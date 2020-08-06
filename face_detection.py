@@ -17,7 +17,7 @@ ap.add_argument('-b', '--blackmode', required=False, help='Forcefully activates 
 args = ap.parse_args()
 
 DEFAULT_CONFIG ='''{
-    "enable_last_frame": true,
+    "enable_last_frame": false,
     "rect_color": [0, 255, 0],
     "text_color": [0, 255, 0],
     "ear_color": [0, 255, 0],
