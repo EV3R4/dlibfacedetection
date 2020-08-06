@@ -76,7 +76,7 @@ face_predictor = dlib.shape_predictor(args.face_predictor)
 
 blackmode = args.blackmode
 
-enable_rect = True
+enable_rects = True
 enable_lines = True
 enable_points = True
 enable_text = True
@@ -140,7 +140,7 @@ def draw_faces(img, rects, shapes):
         (x, y, w, h) = dcv2lib.rect_to_bb(rect)
         shape = shapes[i]
 
-        if enable_rect:
+        if enable_rects:
             draw_rect(img, x, y, w, h)
         if enable_lines:
             draw_lines(img, shape)
@@ -167,7 +167,7 @@ def detect_and_show(img, img_gray):
         cv2.imshow('Facial Landmark Detection #' + args.video, img)
 
 def handle_input():
-    global blackmode, enable_rect, enable_lines, enable_points, enable_text, enable_ear, enable_f2r
+    global blackmode, enable_rects, enable_lines, enable_points, enable_text, enable_ear, enable_f2r
 
     key = cv2.waitKey(1)
     if key == 27:
@@ -178,7 +178,7 @@ def handle_input():
     elif key == 122 and not args.blackmode:
         blackmode = not blackmode
     elif key == 49:
-        enable_rect = not enable_rect
+        enable_rects = not enable_rects
     elif key == 50:
         enable_lines = not enable_lines
     elif key == 51:
