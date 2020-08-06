@@ -17,6 +17,7 @@ ap.add_argument('-v', '--video', required=False, help='Path to a video or camera
 ap.add_argument('-b', '--blackmode', required=False, help='Forcefully activates the blackmode.', action="store_true")
 ap.add_argument('-V', '--no-video-window', required=False, help='Deactivates the video window.', action="store_true")
 ap.add_argument('-I', '--no-input-window', required=False, help='Deactivates the input window.', action="store_true")
+ap.add_argument('-F', '--no-flip', required=False, help='Deactivates image flipping.', action="store_true")
 args = ap.parse_args()
 
 DEFAULT_CONFIG ='''{
@@ -217,7 +218,7 @@ else:
             print('Could not get an image from video capture!')
             break
 
-        if flip:
+        if flip and not args.no_flip:
             img = cv2.flip(img, 1)
         img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
